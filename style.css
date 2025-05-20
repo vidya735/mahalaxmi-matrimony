@@ -1,61 +1,34 @@
 body {
   font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
   margin: 0;
   padding: 0;
 }
 
-.container {
-  max-width: 500px;
-  margin: 30px auto;
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-h1 {
-  text-align: center;
-  color: #333;
-}
-
-.card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
-
-.card img {
-  width: 150px;
-  height: 150px;
-  border-radius: 12px;
-  object-fit: cover;
-}
-
-.details p {
-  margin: 4px 0;
-  font-size: 16px;
-  color: #444;
-}
-
-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  background-color: #25d366;
+header {
+  background-color: #007bff;
   color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #1ebc5a;
-}
-
-.footer-note {
+  padding: 1rem;
   text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  color: #777;
+}
+
+.profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.profile-card {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.profile-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
 }
