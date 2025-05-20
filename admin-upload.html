@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Profile - Admin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      max-width: 600px;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.7rem 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h2>Admin: Upload New Biodata</h2>
+  <form id="profileForm" enctype="multipart/form-data">
+    <label>Name:
+      <input type="text" name="name" required />
+    </label>
+
+    <label>Date of Birth:
+      <input type="date" name="dob" required />
+    </label>
+
+    <label>Gotra:
+      <input type="text" name="gotra" />
+    </label>
+
+    <label>Education:
+      <input type="text" name="education" />
+    </label>
+
+    <label>Occupation:
+      <input type="text" name="occupation" />
+    </label>
+
+    <label>Location:
+      <input type="text" name="location" />
+    </label>
+
+    <label>Contact (Phone or WhatsApp):
+      <input type="text" name="contact" required />
+    </label>
+
+    <label>Upload Photo:
+      <input type="file" name="photo" accept="image/*" required />
+    </label>
+
+    <button type="submit">Submit Profile</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    const form = document.getElementById('profileForm');
+    const status = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      status.textContent = 'Uploading...';
+
+      try {
+        const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (res.ok) {
+          status.textContent = 'Profile uploaded successfully!';
+          form.reset();
+        } else {
+          status.textContent = 'Upload failed. Please try again.';
+        }
+      } catch (err) {
+        console.error(err);
+        status.textContent = 'Error occurred while uploading.';
+      }
+    });
+  </script>
+</body>
+</html>
