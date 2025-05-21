@@ -1,32 +1,40 @@
-document.addEventListener("DOMContentLoaded", () => {
-  fetch("https://mahalaxmi-matrimony.onrender.com/profiles")
-    .then(response => response.json())
-    .then(profiles => {
-      const container = document.getElementById("profiles-container");
-      if (!container) return;
+async function fetchProfiles() {
+  try {
+    const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles');
+    const profiles = await res.json();
 
-      if (profiles.length === 0) {
-        container.innerHTML = "<p>No profiles uploaded yet.</p>";
-        return;
-      }
+    const container = document.getElementById('profiles');
+    container.innerHTML = '';
 
-      profiles.reverse().forEach(profile => {
-        const card = document.createElement("div");
-        card.className = "profile-card";
+    profiles.forEach(profile => {
+      const div = document.createElement('div');
+      div.className = 'profile-card';
 
-        card.innerHTML = `
-          <img src="${profile.imageUrl}" alt="${profile.name}" />
-          <h3>${profile.name}</h3>
-          <p>Age: ${profile.age}</p>
-          <p>Contact: <a href="https://wa.me/${profile.contact}" target="_blank">WhatsApp</a></p>
-        `;
+      const imageUrl = profile.photoUrl || 'https://via.placeholder.com/150';
 
-        container.appendChild(card);
-      });
-    })
-    .catch(err => {
-      console.error("Error fetching profiles:", err);
-      document.getElementById("profiles-container").innerHTML =
-        "<p>Failed to load profiles.</p>";
+      const name = profile.name || 'Name not provided';
+      const age = profile.age || 'N/A';
+      const contact = profile.contact || 'N/A';
+      const education = profile.education || 'N/A';
+      const height = profile.height || 'N/A';
+      const location = profile.location || 'N/A';
+
+      div.innerHTML = `
+        <img src="${imageUrl}" alt="${name}" />
+        <h2>${name}</h2>
+        <p>Age: ${age}</p>
+        <p>Height: ${height}</p>
+        <p>Education: ${education}</p>
+        <p>Location: ${location}</p>
+        <p>Contact: ${contact}</p>
+        <a href="https://wa.me/${contact}" class="whatsapp-btn" target="_blank">Enquire on WhatsApp</a>
+      `;
+
+      container.appendChild(div);
     });
-});
+  } catch (err) {
+    console.error('Error loading profiles:', err);
+  }
+}
+
+fetchProfiles();
