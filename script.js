@@ -13,7 +13,7 @@ async function loadProfiles() {
     data.forEach(profile => {
       const age = getAge(profile.dob);
       const contact = '8618125511';
-      const card = document.createElement('div');
+      const message = `I'm interested in the profile of ${profile.name}. Please share biodata.\nPhoto: ${profile.photo}`;      const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
         <img src="${profile.photo}" alt="${profile.name}">
@@ -26,7 +26,7 @@ async function loadProfiles() {
           <p><strong>Caste:</strong> ${profile.caste}</p>
           <p><strong>Job/Occupation:</strong> ${profile.occupation}</p>
           <p><strong>Annual Income:</strong> ${profile.income}</p>
-          <a class="whatsapp-button" href="https://wa.me/${contact}" target="_blank">Enquire on WhatsApp</a>
+          <a class="whatsapp-button" href="https://wa.me/${contact}?text=${encodeURIComponent(message)}" target="_blank">Enquire on WhatsApp</a>
         </div>
       `;
       profilesDiv.appendChild(card);
