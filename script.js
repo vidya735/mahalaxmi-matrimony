@@ -1,40 +1,48 @@
-async function fetchProfiles() {
+async function loadProfiles() {
   try {
-    const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles');
-    const profiles = await res.json();
+    const res = await fetch('https://mahalaxmi-matrimony.onrender.com/profiles');
+    const data = await res.json();
+    const profilesDiv = document.getElementById('profiles');
+    profilesDiv.innerHTML = '';
 
-    const container = document.getElementById('profiles');
-    container.innerHTML = '';
+    if (data.length === 0) {
+      profilesDiv.innerHTML = '<p>No profiles found.</p>';
+      return;
+    }
 
-    profiles.forEach(profile => {
-      const div = document.createElement('div');
-      div.className = 'profile-card';
-
-      const imageUrl = profile.photoUrl || 'https://via.placeholder.com/150';
-
-      const name = profile.name || 'Name not provided';
-      const age = profile.age || 'N/A';
-      const contact = profile.contact || 'N/A';
-      const education = profile.education || 'N/A';
-      const height = profile.height || 'N/A';
-      const location = profile.location || 'N/A';
-
-      div.innerHTML = `
-        <img src="${imageUrl}" alt="${name}" />
-        <h2>${name}</h2>
-        <p>Age: ${age}</p>
-        <p>Height: ${height}</p>
-        <p>Education: ${education}</p>
-        <p>Location: ${location}</p>
-        <p>Contact: ${contact}</p>
-        <a href="https://wa.me/${contact}" class="whatsapp-btn" target="_blank">Enquire on WhatsApp</a>
+    data.forEach(profile => {
+      const age = getAge(profile.dob);
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <img src="${profile.photo}" alt="${profile.name}">
+        <div class="info">
+          <p><strong>Name:</strong> ${profile.name}</p>
+          <p><strong>DOB:</strong> ${profile.dob}</p>
+          <p><strong>Age:</strong> ${age}</p>
+          <p><strong>Gender:</strong> ${profile.gender}</p>
+          <p><strong>Caste:</strong> ${profile.caste}</p>
+          <p><strong>Location:</strong> ${profile.location}</p>
+          <a class="whatsapp-button" href="https://wa.me/${profile.contact}" target="_blank">Enquire on WhatsApp</a>
+        </div>
       `;
-
-      container.appendChild(div);
+      profilesDiv.appendChild(card);
     });
   } catch (err) {
-    console.error('Error loading profiles:', err);
+    console.error('Failed to load profiles:', err);
+    document.getElementById('profiles').innerHTML = '<p>Error loading profiles.</p>';
   }
 }
 
-fetchProfiles();
+function getAge(dob) {
+  const birthDate = new Date(dob);
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    age--;
+  }
+  return age;
+}
+
+loadProfiles();
