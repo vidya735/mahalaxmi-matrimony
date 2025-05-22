@@ -72,6 +72,10 @@ app.get('/', (req, res) => {
   res.send('Backend working');
 });
 
+app.get('/delete-profile', (req, res) => {
+  res.sendFile(__dirname + '/admin-delete.html');
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
