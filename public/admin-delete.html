@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Delete Profile</title>
+</head>
+<body>
+  <h2>Delete Profile</h2>
+  <form id="deleteForm">
+    <label>Name:</label><br />
+    <input type="text" name="name" required /><br /><br />
+
+    <label>Date of Birth (YYYY-MM-DD):</label><br />
+    <input type="date" name="dob" required /><br /><br />
+
+    <button type="submit">Delete</button>
+  </form>
+
+  <p id="message"></p>
+  <br />
+  <a href="admin-upload.html">Back to Admin Page</a>
+
+  <script>
+    document.getElementById("deleteForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const name = form.name.value;
+      const dob = form.dob.value;
+
+      const response = await fetch("https://mahalaxmi-matrimony.onrender.com/delete-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, dob })
+      });
+
+      const result = await response.json();
+      document.getElementById("message").textContent = result.message;
+    });
+  </script>
+</body>
+</html>
