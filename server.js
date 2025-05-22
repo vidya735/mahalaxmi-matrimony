@@ -75,3 +75,18 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
+
+//POST- deletes profiles
+app.post('/delete-profile', async (req, res) => {
+  try {
+    const { name, dob } = req.body;
+    const deleted = await Profile.findOneAndDelete({ name, dob });
+    if (deleted) {
+      res.json({ message: 'Profile deleted successfully' });
+    } else {
+      res.json({ message: 'No matching profile found' });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'Error deleting profile' });
+  }
+});
