@@ -48,13 +48,14 @@ app.post('/api/profiles', upload.single('photo'), async (req, res) => {
       caste: req.body.caste,
       place: req.body.place,
       contact: req.body.contact,
+      gender: req.body.gender,
       photo: req.file ? `/uploads/${req.file.filename}` : ''
     });
 
     await newProfile.save();
     res.status(200).json({ message: 'Profile submitted successfully' });
   } catch (err) {
-    console.error(err);
+    console.error('Error saving profile:', err);
     res.status(500).json({ error: 'Error saving profile' });
   }
 });
