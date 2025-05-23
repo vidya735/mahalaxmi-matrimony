@@ -4,11 +4,12 @@ const mongoose = require('mongoose');
 
 const profileSchema = new mongoose.Schema({
   name: String,
+  gender: String,
   dob: String,
-  age: String,
-  contact: String,
+  location: String,
   caste: String,
-  place: String,
+  occupation: String,
+  income: String,
   photo: String, // stores filename like 'abc.jpg'
   createdAt: {
     type: Date,
