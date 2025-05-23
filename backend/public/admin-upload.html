@@ -83,7 +83,7 @@
       status.textContent = 'Uploading...';
 
       try {
-        const res = await fetch('https://mahalaxmi-matrimony.onrender.com/upload-profile', {
+        const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles', {
           method: 'POST',
           body: formData,
         });
