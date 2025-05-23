@@ -44,11 +44,12 @@ app.post('/api/profiles', upload.single('photo'), async (req, res) => {
   try {
     const newProfile = new Profile({
       name: req.body.name,
-      dob: req.body.dob,
-      caste: req.body.caste,
-      place: req.body.place,
-      contact: req.body.contact,
       gender: req.body.gender,
+      dob: req.body.dob,
+      location:req.body.location,
+      caste: req.body.caste,
+      occupation: req.body.occupation,
+      income: req.body.income,  
       photo: req.file ? `/uploads/${req.file.filename}` : ''
     });
 
