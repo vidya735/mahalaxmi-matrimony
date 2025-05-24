@@ -66,8 +66,9 @@
       <input type="file" name="photo" accept="image/*" required />
     </label>
 
-    <button type="submit">Submit Profile</button>
+    <button type="submit">Submit Profile</button><br><br>
     <a href="https://mahalaxmi-matrimony.onrender.com/admin-delete.html">Want to delete a profile? Please click here.</a>
+    <!--<a href="http://localhost:3000/admin-delete.html">Want to delete a profile? Please click here.</a>-->
   </form>
 
   <p id="status"></p>
@@ -83,17 +84,31 @@
       status.textContent = 'Uploading...';
 
       try {
-        const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles', {
+        /*const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles', {
           method: 'POST',
           body: formData,
-        });
+        });*/
+const res = await fetch('http://localhost:3000/api/profiles', {
+  method: 'POST',
+  body: formData,
+});
+
+      
 
         if (res.ok) {
-          status.textContent = 'Profile uploaded successfully!';
-          form.reset();
-        } else {
-          status.textContent = 'Upload failed. Please try again.';
-        }
+  status.textContent = 'Profile uploaded successfully!';
+  form.reset();
+} else {
+  const text = await res.text(); // ⬅️ read raw text response
+  try {
+    const json = JSON.parse(text);
+    status.textContent = `Upload failed: ${json.error}`;
+  } catch {
+    status.textContent = 'Upload failed. Server returned non-JSON response.';
+    console.error('Server returned:', text);
+  }
+}
+
       } catch (err) {
         console.error(err);
         status.textContent = 'Error occurred while uploading.';
