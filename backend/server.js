@@ -42,6 +42,9 @@ const upload = multer({ storage: storage });
 // POST - Create new profile
 app.post('/api/profiles', upload.single('photo'), async (req, res) => {
   try {
+    console.log('Upload API hit'); 
+    console.log("Form fields:", req.body);
+    console.log("Uploaded file:", req.file);
     const newProfile = new Profile({
       name: req.body.name,
       gender: req.body.gender,
@@ -50,14 +53,13 @@ app.post('/api/profiles', upload.single('photo'), async (req, res) => {
       caste: req.body.caste,
       occupation: req.body.occupation,
       income: req.body.income,  
-      photo: req.file ? `/uploads/${req.file.filename}` : ''
+      photo: req.file ? req.file.filename : ''
     });
-
     await newProfile.save();
     res.status(200).json({ message: 'Profile submitted successfully' });
   } catch (err) {
     console.error('Error saving profile:', err);
-    res.status(500).json({ error: 'Error saving profile' });
+    res.status(500).json({ error: err.message, stack: err.stack }); // ✅ full JSON error
   }
 });
 
