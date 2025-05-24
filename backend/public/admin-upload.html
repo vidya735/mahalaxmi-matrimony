@@ -84,16 +84,11 @@
       status.textContent = 'Uploading...';
 
       try {
-        /*const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles', {
+        const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles', {
+        //const res = await fetch('http://localhost:3000/api/profiles', {
           method: 'POST',
           body: formData,
-        });*/
-const res = await fetch('http://localhost:3000/api/profiles', {
-  method: 'POST',
-  body: formData,
-});
-
-      
+        });     
 
         if (res.ok) {
   status.textContent = 'Profile uploaded successfully!';
