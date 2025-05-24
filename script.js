@@ -1,6 +1,7 @@
 async function loadProfiles() {
   try {
-    const res = await fetch('https://mahalaxmi-matrimony.onrender.com/profiles');
+    const res = await fetch('https://mahalaxmi-matrimony.onrender.com/api/profiles');
+    //const res = await fetch('http://localhost:3000/api/profiles');
     const data = await res.json();
     const profilesDiv = document.getElementById('profiles');
     profilesDiv.innerHTML = '';
@@ -13,10 +14,13 @@ async function loadProfiles() {
     data.forEach(profile => {
       const age = getAge(profile.dob);
       const contact = '8618125511';
-      const message = `I'm interested in the profile of ${profile.name}. Please share biodata.\nPhoto: ${profile.photo}`;      const card = document.createElement('div');
+      //const photoURL = `http://localhost:3000/uploads/${profile.photo}`;
+      const photoURL = `https://mahalaxmi-matrimony.onrender.com/uploads/${profile.photo}`;
+      const message = `I'm interested in the profile of ${profile.name}. Please share biodata.\nPhoto: ${photoURL}`;      
+      const card = document.createElement('div');
       card.className = 'card';
       card.innerHTML = `
-        <img src="${profile.photo}" alt="${profile.name}">
+        <img src="${photoURL}" alt="${profile.name}">
         <div class="info">
           <p><strong>Name:</strong> ${profile.name}</p>
           <p><strong>Gender:</strong> ${profile.gender}</p>
