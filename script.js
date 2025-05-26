@@ -15,7 +15,7 @@ async function loadProfiles() {
       const age = getAge(profile.dob);
       const contact = '8618125511';
       //const photoURL = `http://localhost:3000/uploads/${profile.photo}`;
-      const photoURL = `https://mahalaxmi-matrimony.onrender.com/uploads/${profile.photo}`;
+      const photoURL = profile.photo;
       const message = `I'm interested in the profile of ${profile.name}. Please share biodata.\nPhoto: ${photoURL}`;      
       const card = document.createElement('div');
       card.className = 'card';
