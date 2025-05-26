@@ -13,6 +13,17 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const multer = require('multer');
+
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Cloudinary config from .env
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
+
 require('dotenv').config();
 
 const Profile = require('./models/Profile');
@@ -36,8 +47,8 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
-// Multer setup for file uploads
-const storage = multer.diskStorage({
+// Multer setup for file uploads - using cloudinary storage for longer support so commenting multer setup.
+/*const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
   },
@@ -46,7 +57,19 @@ const storage = multer.diskStorage({
     cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
+const upload = multer({ storage: storage }); */
+
+// Cloudinary setup for file uploads.
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'mahalaxmi_profiles',
+    allowed_formats: ['jpg', 'jpeg', 'png'],
+    transformation: [{ width: 600, height: 600, crop: 'limit' }]
+  },
+});
 const upload = multer({ storage: storage });
+
 
 // POST - Create new profile
 app.post('/api/profiles', upload.single('photo'), async (req, res) => {
@@ -62,7 +85,7 @@ app.post('/api/profiles', upload.single('photo'), async (req, res) => {
       caste: req.body.caste,
       occupation: req.body.occupation,
       income: req.body.income,  
-      photo: req.file ? req.file.filename : ''
+      photo: req.file ? req.file.path : ''
     });
     await newProfile.save();
     res.status(200).json({ message: 'Profile submitted successfully' });
