@@ -123,22 +123,36 @@ app.listen(PORT, () => {
 app.post('/delete-profile', async (req, res) => {
   try {
     let { name, dob } = req.body;
-    name = name.trim().toLowerCase();
-    dob = dob.trim(); 
+   // name = name.trim().toLowerCase();
+    //dob = dob.trim(); 
     //const deleted = await Profile.findOneAndDelete({ name, dob }); -- working
      
     // Use case-insensitive search in DB
-    const deleted = await Profile.findOneAndDelete({
+    /*const deleted = await Profile.findOneAndDelete({
       name: { $regex: new RegExp(`^${name}$`, 'i') },
       dob: dob
-    });
+    });*/
 
-    if (deleted) {
+      // Normalize input: remove extra spaces and convert to lowercase
+    const normalizedName = name.trim().replace(/\s+/g, ' ').toLowerCase();
+    const trimmedDob = dob.trim();
+
+    // Get all profiles with matching DOB
+    const profiles = await Profile.find({ dob: trimmedDob });
+
+    // Try to find matching name after normalizing spaces and case
+    const profileToDelete = profiles.find(p =>
+      p.name.trim().replace(/\s+/g, ' ').toLowerCase() === normalizedName
+    );
+
+    if (profileToDelete) {
+      await Profile.findByIdAndDelete(profileToDelete._id);
       res.json({ message: 'Profile deleted successfully' });
     } else {
       res.json({ message: 'No matching profile found' });
     }
   } catch (err) {
+    console.error('Delete error:', err);
     res.status(500).json({ message: 'Error deleting profile' });
   }
 });
