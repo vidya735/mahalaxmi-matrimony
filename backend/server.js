@@ -71,6 +71,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage: storage });
 
 
+
 // POST - Create new profile
 app.post('/api/profiles', upload.single('photo'), async (req, res) => {
   try {
@@ -122,7 +123,16 @@ app.listen(PORT, () => {
 app.post('/delete-profile', async (req, res) => {
   try {
     const { name, dob } = req.body;
-    const deleted = await Profile.findOneAndDelete({ name, dob });
+    name = name.trim().toLowerCase();
+    dob = dob.trim(); 
+    //const deleted = await Profile.findOneAndDelete({ name, dob }); -- working
+     
+    // Use case-insensitive search in DB
+    const deleted = await Profile.findOneAndDelete({
+      name: { $regex: new RegExp(`^${name}$`, 'i') },
+      dob: dob
+    });
+    
     if (deleted) {
       res.json({ message: 'Profile deleted successfully' });
     } else {
