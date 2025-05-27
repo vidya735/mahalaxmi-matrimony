@@ -122,7 +122,7 @@ app.listen(PORT, () => {
 //POST- deletes profiles
 app.post('/delete-profile', async (req, res) => {
   try {
-    const { name, dob } = req.body;
+    let { name, dob } = req.body;
     name = name.trim().toLowerCase();
     dob = dob.trim(); 
     //const deleted = await Profile.findOneAndDelete({ name, dob }); -- working
@@ -132,7 +132,7 @@ app.post('/delete-profile', async (req, res) => {
       name: { $regex: new RegExp(`^${name}$`, 'i') },
       dob: dob
     });
-    
+
     if (deleted) {
       res.json({ message: 'Profile deleted successfully' });
     } else {
